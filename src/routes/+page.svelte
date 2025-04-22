@@ -1,5 +1,4 @@
 <script lang="ts">
-	// import Dropzone from 'svelte-file-dropzone';
 	let files = $state<FileList | null>(null);
 	let apiKey = $state<string>('');
 	let transcription = $state<string>('');
@@ -49,41 +48,89 @@
 </script>
 
 <main>
-	<h1 style="color: white;">🎧 Upload and Transcribe</h1>
+	<div class="container">
+		<h1>🎧 Upload and Transcribe</h1>
 
-	<input type="text" placeholder="API Key" bind:value={apiKey} />
-	<input style="color: white;" type="file" accept="audio/*" bind:files />
+		<input type="text" placeholder="API Key" bind:value={apiKey} class="input" />
 
-	<button onclick={handleUpload} disabled={loading} class="myButton">
-		{loading ? 'Transcribing...' : 'Transcribe Audio'}
-	</button>
+		<label for="file-upload" class="upload-label">🎤 Choose Audio File</label>
+		<input id="file-upload" type="file" accept="audio/*" bind:files class="file-hidden" />
 
-	{#if error}
-		<p class="error">{error}</p>
-	{/if}
+		{#if files}
+			<p style="color: white;">Selected file: {files[0]?.name}</p>
+		{/if}
 
-	{#if transcription}
-		<div class="result">
-			<h2>Transcription:</h2>
-			<p>{transcription}</p>
-		</div>
-	{/if}
+		<button on:click={handleUpload} disabled={loading} class="myButton">
+			{loading ? 'Transcribing...' : 'Transcribe Audio'}
+		</button>
+
+		{#if error}
+			<p class="error">{error}</p>
+		{/if}
+
+		{#if transcription}
+			<div class="result">
+				<h2>Transcription:</h2>
+				<p>{transcription}</p>
+			</div>
+		{/if}
+	</div>
 </main>
 
 <style>
 	main {
-		/* max-width: 600px; */
-		margin: 0;
-		padding: 2rem;
-		height: 100vh;
-		font-family: system-ui, sans-serif;
 		background-color: #1f2f47;
+		height: 100vh;
+		padding: 2rem;
+		font-family: system-ui, sans-serif;
+		display: flex;
+		align-items: center;
+		justify-content: center;
 	}
 
-	input,
-	button {
+	.container {
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		width: 100%;
+		/* max-width: 500px; */
+		background: #2a3b5c;
+		padding: 2rem;
+		border-radius: 1rem;
+		box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+	}
+
+	h1 {
+		color: white;
+		margin-bottom: 1.5rem;
+	}
+
+	.input {
+		width: 100%;
+		padding: 0.75rem;
 		margin-bottom: 1rem;
-		display: block;
+		border-radius: 0.5rem;
+		border: none;
+	}
+
+	.upload-label {
+		display: inline-block;
+		background-color: #4f46e5;
+		color: white;
+		padding: 0.75rem 1.5rem;
+		border-radius: 0.5rem;
+		cursor: pointer;
+		margin-bottom: 1rem;
+		font-weight: bold;
+		transition: background-color 0.2s;
+	}
+
+	.upload-label:hover {
+		background-color: #4338ca;
+	}
+
+	.file-hidden {
+		display: none;
 	}
 
 	.result {
@@ -91,10 +138,13 @@
 		background: #f9f9f9;
 		padding: 1rem;
 		border-radius: 6px;
+		width: 100%;
+		color: #1f2f47;
 	}
 
 	.error {
 		color: red;
+		margin-top: 0.5rem;
 	}
 
 	.myButton {
@@ -108,7 +158,7 @@
 		color: #ffffff;
 		font-family: Arial;
 		font-size: 15px;
-		padding: 20px 56px;
+		padding: 15px 40px;
 		text-decoration: none;
 		text-shadow: 0px 6px 34px #263666;
 	}
