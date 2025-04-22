@@ -1,5 +1,4 @@
 <script lang="ts">
-	export const prerender = true;
 	// import Dropzone from 'svelte-file-dropzone';
 	let files = $state<FileList | null>(null);
 	let apiKey = $state<string>('');
